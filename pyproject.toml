@@ -1,20 +1,17 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-
-[project]
-name = "CRUDBuilder"
-version = "0.0.1"
-authors = [
-  { name="Rich Winslow", email="Rich@tetricuslabs.com" },
-    { name= "Leonard Mazzone", email="lenny@tetricuslabs.com"}
-]
-description = "A small example package"
+[tool.poetry]
+name = "crudbuilder"
+version = "0.1.0"
+description = "CRUDBuilder is a library that helps you to create CRUD endpoints for your FastAPI/ SqlAlchemy database models."
+authors = ["Leonard Mazzone <lenny@tetricuslabs.com>", "Rich Winslow <rich@tetricuslabs.com>"]
+license = "MIT"
 readme = "README.md"
-requires-python = ">=3.11"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.0"
+sqlalchemy = "^2.0.31"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

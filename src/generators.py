@@ -1,7 +1,9 @@
 from typing import Optional
 
 
-def generate_cache_key(cache_prefix: str, item_primary_key: str, cache_postfix:Optional[str] = None) -> str:
+def generate_cache_key(
+    cache_prefix: str, item_primary_key: str, cache_postfix: Optional[str] = None
+) -> str:
     """Generate a unique cache key with a prefix and key.
     :param cache_prefix: The prefix to use for the cache key, e.g. "feed_item_content"
     :param item_primary_key: The primary key of the item to cache

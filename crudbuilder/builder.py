@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import Session
 
-from src.transform import (
+from crudbuilder.transform import (
     build_joins,
     get_create_schema,
     get_pk,
@@ -18,7 +18,7 @@ from src.transform import (
     run_postprocessors,
 )
 
-from src.generators import generate_cache_key
+from crudbuilder.generators import generate_cache_key
 
 _LOGGER = logging.getLogger(__name__)
 

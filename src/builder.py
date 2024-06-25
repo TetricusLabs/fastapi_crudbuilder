@@ -9,7 +9,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import Session
 
-from src.config import EXCLUDE_FIELDS
 from src.transform import (
     build_joins,
     get_create_schema,
@@ -125,7 +124,7 @@ class CRUDBuilder:
         db_func: Callable,
         db_model: DeclarativeMeta,
         cache_func: Optional[Callable] = None,
-        cache_expiry_seconds: int = settings.cache_expiry_seconds, #TODO: how do we handle defaults and such as a package?
+        cache_expiry_seconds: int = 60,
         prefix: str = None,
         create_schema: Optional[BaseModel] = None,
         update_schema: Optional[BaseModel] = None,
@@ -141,7 +140,7 @@ class CRUDBuilder:
         create_dependencies: Optional[Sequence[Depends]] = None,
         update_dependencies: Optional[Sequence[Depends]] = None,
         delete_dependencies: Optional[Sequence[Depends]] = None,
-        exclude_fields: Optional[set] = EXCLUDE_FIELDS,
+        exclude_fields: Optional[set] = None,
         response_postprocessors: Optional[Sequence[Callable]] = None,
     ):
         """Initializes CRUDBuilder object

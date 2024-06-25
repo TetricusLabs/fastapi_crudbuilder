@@ -1,1 +1,0 @@
-EXCLUDE_FIELDS = set(("versions", "created_at")) # TODO: make this user configurable

@@ -4,10 +4,17 @@ from typing import Annotated, Any, Callable, Optional, Sequence
 from fastapi import APIRouter, Depends, HTTPException, Security
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, RootModel
-from sqlalchemy import delete, select
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.declarative import DeclarativeMeta
-from sqlalchemy.orm import Session
+
+try:
+    from sqlalchemy import delete, select
+    from sqlalchemy.exc import IntegrityError
+    from sqlalchemy.ext.declarative import DeclarativeMeta
+    from sqlalchemy.orm import Session
+except ImportError:
+    sqlalchemy_installed = False
+else:
+    sqlalchemy_installed = True
+
 
 from crudbuilder.transform import (
     build_joins,
@@ -143,6 +150,10 @@ class CRUDBuilder:
         exclude_fields: Optional[set] = None,
         response_postprocessors: Optional[Sequence[Callable]] = None,
     ):
+        assert (
+            sqlalchemy_installed
+        ), "SQLAlchemy must be installed."
+        
         """Initializes CRUDBuilder object
 
         :param prefix: URL prefix for the generated routes.

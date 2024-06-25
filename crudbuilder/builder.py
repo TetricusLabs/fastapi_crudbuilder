@@ -15,7 +15,6 @@ except ImportError:
 else:
     sqlalchemy_installed = True
 
-
 from crudbuilder.transform import (
     build_joins,
     get_create_schema,
@@ -127,33 +126,33 @@ class CRUDBuilder:
     """
 
     def __init__(
-        self,
-        db_func: Callable,
-        db_model: DeclarativeMeta,
-        cache_func: Optional[Callable] = None,
-        cache_expiry_seconds: int = 60,
-        prefix: str = None,
-        create_schema: Optional[BaseModel] = None,
-        update_schema: Optional[BaseModel] = None,
-        infer_create: bool = False,
-        infer_update: bool = False,
-        allow_delete: bool = False,
-        read_security: Optional[Security] = None,
-        create_security: Optional[Security] = None,
-        update_security: Optional[Security] = None,
-        delete_security: Optional[Security] = None,
-        router_dependencies: Optional[Sequence[Depends]] = None,
-        read_dependencies: Optional[Sequence[Depends]] = None,
-        create_dependencies: Optional[Sequence[Depends]] = None,
-        update_dependencies: Optional[Sequence[Depends]] = None,
-        delete_dependencies: Optional[Sequence[Depends]] = None,
-        exclude_fields: Optional[set] = None,
-        response_postprocessors: Optional[Sequence[Callable]] = None,
+            self,
+            db_func: Callable,
+            db_model: DeclarativeMeta,
+            cache_func: Optional[Callable] = None,
+            cache_expiry_seconds: int = 60,
+            prefix: str = None,
+            create_schema: Optional[BaseModel] = None,
+            update_schema: Optional[BaseModel] = None,
+            infer_create: bool = False,
+            infer_update: bool = False,
+            allow_delete: bool = False,
+            read_security: Optional[Security] = None,
+            create_security: Optional[Security] = None,
+            update_security: Optional[Security] = None,
+            delete_security: Optional[Security] = None,
+            router_dependencies: Optional[Sequence[Depends]] = None,
+            read_dependencies: Optional[Sequence[Depends]] = None,
+            create_dependencies: Optional[Sequence[Depends]] = None,
+            update_dependencies: Optional[Sequence[Depends]] = None,
+            delete_dependencies: Optional[Sequence[Depends]] = None,
+            exclude_fields: Optional[set] = None,
+            response_postprocessors: Optional[Sequence[Callable]] = None,
     ):
         assert (
             sqlalchemy_installed
         ), "SQLAlchemy must be installed."
-        
+
         """Initializes CRUDBuilder object
 
         :param prefix: URL prefix for the generated routes.
@@ -288,11 +287,11 @@ class CRUDBuilder:
         """Build route to read a single item"""
 
         def route(
-            item_id: self.pk_type,
-            db: Annotated[Session, Depends(self.db_func)],
-            cache: Annotated[Any | None, Depends(self.cache_func)] = None,
-            _: Annotated[Any | None, self.read_security] = None,
-            relationships: Optional[str] = None,
+                item_id: self.pk_type,
+                db: Annotated[Session, Depends(self.db_func)],
+                cache: Annotated[Any | None, Depends(self.cache_func)] = None,
+                _: Annotated[Any | None, self.read_security] = None,
+                relationships: Optional[str] = None,
         ):
             _LOGGER.info(
                 f"Reading {self.db_model.__name__} {item_id}; "
@@ -331,16 +330,16 @@ class CRUDBuilder:
         """Build route to read all items or a page of items"""
 
         def route(
-            db: Annotated[Session, Depends(self.db_func)],
-            cache: Annotated[Any | None, Depends(self.cache_func)] = None,
-            _: Annotated[Any | None, self.read_security] = None,
-            limit: Optional[int] = 100,  # Prevent accidentally hitting db w/o limit
-            skip: Optional[int] = 0,
-            sort_field: str = self.pk_name,
-            sort_desc: Optional[bool] = False,
-            equals_field: Optional[str] = None,
-            equals_value: Optional[str] = None,
-            relationships: Optional[str] = None,
+                db: Annotated[Session, Depends(self.db_func)],
+                cache: Annotated[Any | None, Depends(self.cache_func)] = None,
+                _: Annotated[Any | None, self.read_security] = None,
+                limit: Optional[int] = 100,  # Prevent accidentally hitting db w/o limit
+                skip: Optional[int] = 0,
+                sort_field: str = self.pk_name,
+                sort_desc: Optional[bool] = False,
+                equals_field: Optional[str] = None,
+                equals_value: Optional[str] = None,
+                relationships: Optional[str] = None,
         ):
             _LOGGER.info(
                 f"Reading all {self.db_model.__name__}; "
@@ -428,9 +427,9 @@ class CRUDBuilder:
         """Build route to create one item"""
 
         def route(
-            create_schema: self.create_schema,
-            db: Annotated[Session, Depends(self.db_func)],
-            _: Annotated[Any | None, self.create_security] = None,
+                create_schema: self.create_schema,
+                db: Annotated[Session, Depends(self.db_func)],
+                _: Annotated[Any | None, self.create_security] = None,
         ):
             _LOGGER.info(
                 f"Create {self.db_model.__name__}; "
@@ -451,11 +450,11 @@ class CRUDBuilder:
         """Build route to update attributes for one item"""
 
         def route(
-            item_id: self.pk_type,
-            update_fields: dict[str, Any],
-            db: Annotated[Session, Depends(self.db_func)],
-            cache: Annotated[Any | None, Depends(self.cache_func)] = None,
-            _: Annotated[Any | None, self.update_security] = None,
+                item_id: self.pk_type,
+                update_fields: dict[str, Any],
+                db: Annotated[Session, Depends(self.db_func)],
+                cache: Annotated[Any | None, Depends(self.cache_func)] = None,
+                _: Annotated[Any | None, self.update_security] = None,
         ):
             # Validate type and transform raw payload into Pydantic model
             update_schema = self.update_schema(**update_fields)
@@ -499,10 +498,10 @@ class CRUDBuilder:
         """Build route to delete one item"""
 
         def route(
-            item_id: self.pk_type,
-            db: Annotated[Session, Depends(self.db_func)],
-            cache: Annotated[Any | None, Depends(self.cache_func)] = None,
-            _: Annotated[Any | None, self.delete_security] = None,
+                item_id: self.pk_type,
+                db: Annotated[Session, Depends(self.db_func)],
+                cache: Annotated[Any | None, Depends(self.cache_func)] = None,
+                _: Annotated[Any | None, self.delete_security] = None,
         ):
             _LOGGER.info(f"Delete one {self.db_model.__name__} {item_id}")
             try:
@@ -532,9 +531,9 @@ class CRUDBuilder:
         """Build route to delete all items"""
 
         def route(
-            db: Annotated[Session, Depends(self.db_func)],
-            cache: Annotated[Any | None, Depends(self.cache_func)] = None,
-            _: Annotated[Any | None, self.delete_security] = None,
+                db: Annotated[Session, Depends(self.db_func)],
+                cache: Annotated[Any | None, Depends(self.cache_func)] = None,
+                _: Annotated[Any | None, self.delete_security] = None,
         ):
             _LOGGER.info(f"Delete all {self.db_model.__name__}")
             try:

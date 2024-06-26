@@ -12,11 +12,11 @@ Endpoints are created for the following operations:
 - Delete one item by primary key
 
 Endpoints created by CRUDBuilder are designed to support the OpenAPI documentation that FastAPI automatically generates.
-Optionally, you can add security, caching and custom postprocessors to the CRUD endpoints.
+Optionally, you can add security, caching and custom postprocessors to the generated endpoints.
 
 ---
 
-**Documentation**: <a href="https://github.com/TetricusLabs/crudbuilder" target="_blank">https://github.com/TetricusLabs/crudbuilder</a>
+**Documentation**: (This file) <a href="https://github.com/TetricusLabs/crudbuilder" target="_blank">https://github.com/TetricusLabs/crudbuilder</a>
 
 **Source Code**: <a href="https://github.com/TetricusLabs/crudbuilder" target="_blank">https://github.com/TetricusLabs/crudbuilder</a>
 
@@ -42,7 +42,7 @@ from src.security import YOUR_SECURITY
 
 example = APIRouter(prefix="/example", tags=["Example CRUD"]) # set up a FastAPI router
 
-@example.get("custom_non_crud_route")
+@example.get("custom_non_crudbldr_route")
 def custom_route():
     return {"message": "Hello World"}
 
@@ -70,16 +70,17 @@ app.include_router(example)
 ```
 ## Required parameters
 - db_model: The SqlAlchemy model you want to create CRUD endpoints for
-- db_func: The function that returns the SqlAlchemy session
+- db_func: The function that returns the SqlAlchemy session you'd like to use
 
 ## Optional extensions
 
 ### Infer Create/Update
-This will infer the model for the create and update endpoints from the SqlAlchemy model. Otherwise you can pass in a Pydantic model
-for the data to be validated against. This should also be reflected in the automatically generated OpenAPI documentation.
+This will infer the model for the create and update endpoints from the SqlAlchemy model. Otherwise, you can pass in a 
+custom Pydantic model for the data to be validated against. This should also be reflected in the automatically generated OpenAPI documentation.
 
 ### Security
-You can pass in a FastAPI Security object to the CRUDBuilder class. This will be applied based on the operation type (read, create, update, delete).
+You can pass in a FastAPI Security object to the CRUDBuilder class for each operation type (read, create, update, delete).
+
 ### Postprocessors
 Post Processors are passed into the CRUDBuilder class as a list of functions that take the model as an argument and
 return a function that takes the response as an argument and returns a modified version of the response. 

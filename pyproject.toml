@@ -1,14 +1,6 @@
 [project]
 requires-python = ">=3.11"
-dependencies = [
-    { package = "fastapi", version = "^0.111.0" },
-    { package = "sqlalchemy", version = "^2.0.31" },
-]
 
-[project.optional-dependencies]
-pymemcache = [
-    { package = "pymemcache", version = "^4.0.0" },
-]
 
 [tool.poetry]
 name = "CRUDBuilder"
@@ -26,6 +18,9 @@ python = "^3.11"
 fastapi = "^0.111.0"
 sqlalchemy = "^2.0.31"
 
+[tool.poetry.group.optional.dependencies]
+optional = true
+pymemcache = "^4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.10"

@@ -81,13 +81,16 @@ def get_create_schema(db_model: DeclarativeMeta, exclude_fields: set[str] = None
     )
 
 
-def get_update_schema(db_model: DeclarativeMeta, exclude_fields: set[str]) -> BaseModel:
+def get_update_schema(db_model: DeclarativeMeta, exclude_fields: set[str] = None) -> BaseModel:
     """Dynamically build update schema from given database model
 
     :param db_model: A SQLALchemy declarative model class
     :param exclude_fields: Fields to exclude when building model schemas
     :return: Pydantic request model for update endpoints
     """
+    if exclude_fields is None:
+        exclude_fields = set()
+        
     columns = inspect(db_model).columns.items()
     base_columns = {
         name: (

@@ -9,6 +9,12 @@ description = "CRUDBuilder is a library that helps you to create CRUD endpoints 
 authors = ["Leonard Mazzone <lenny@tetricuslabs.com>", "Rich Winslow <rich@tetricuslabs.com>"]
 license = "MIT"
 readme = "README.md"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Framework :: FastAPI",
+]
 
 [tool.ruff]
 line-length = 88

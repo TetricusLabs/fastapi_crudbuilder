@@ -22,7 +22,7 @@ classifiers = [
 line-length = 88
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 fastapi = "^0.111.0"
 sqlalchemy = "^2.0.31"
 

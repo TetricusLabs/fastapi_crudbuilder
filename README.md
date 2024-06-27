@@ -27,7 +27,7 @@ Optionally, you can add security, caching and custom postprocessors to the gener
 
 ## Installation
 ```bash
-poetry add CRUDBuilder
+poetry add crudbuilder
 ```
 ## Usage
 ```python

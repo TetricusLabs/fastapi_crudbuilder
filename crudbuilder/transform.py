@@ -18,7 +18,7 @@ def get_pk(db_model: DeclarativeMeta) -> Optional[Column]:
 
 
 def get_response_model(
-    db_model: DeclarativeMeta, exclude_fields: set[str]
+    db_model: DeclarativeMeta, exclude_fields: set[str] = None
 ) -> BaseModel:
     """Dynamically build response model from given database model
 
@@ -26,6 +26,9 @@ def get_response_model(
     :param exclude_fields: Fields to exclude when building model schemas
     :return: Pydantic model that defines response for endpoints
     """
+    if exclude_fields is None:
+        exclude_fields = set()
+        
     columns = inspect(db_model).columns.items()
     relationship_names = inspect(db_model).relationships.keys()
     base_columns = {

@@ -108,7 +108,7 @@ should work, but this has not been tested.
 ## Supported ORMS/ Caches
 (Only SqlAlchemy and Memcached are supported for now)
 - SqlAlchemy
-- Memcached (pymemcached cleint)
+- Memcached (pymemcached client)
 
 
 ## Calling endpoints:

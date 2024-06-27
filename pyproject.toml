@@ -4,7 +4,7 @@ requires-python = ">=3.11"
 
 [tool.poetry]
 name = "CRUDBuilder"
-version = "0.1.0"
+version = "0.1.1a0"
 description = "CRUDBuilder is a library that helps you to create CRUD endpoints for your FastAPI/ SqlAlchemy database models."
 authors = ["Leonard Mazzone <lenny@tetricuslabs.com>", "Rich Winslow <rich@tetricuslabs.com>"]
 license = "MIT"
@@ -19,7 +19,6 @@ fastapi = "^0.111.0"
 sqlalchemy = "^2.0.31"
 
 [tool.poetry.group.optional.dependencies]
-optional = true
 pymemcache = "^4.0.0"
 
 [tool.poetry.group.dev.dependencies]

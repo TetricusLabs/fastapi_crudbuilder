@@ -1,1 +1,1 @@
-from builder import CRUDBuilder as CRUDBuilder
+from .builder import CRUDBuilder as CRUDBuilder

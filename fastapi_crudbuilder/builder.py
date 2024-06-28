@@ -15,7 +15,7 @@ except ImportError:
 else:
     sqlalchemy_installed = True
 
-from crudbuilder.transform import (
+from fastapi_crudbuilder.transform import (
     build_joins,
     get_create_schema,
     get_pk,
@@ -24,7 +24,7 @@ from crudbuilder.transform import (
     run_postprocessors,
 )
 
-from crudbuilder.generators import generate_cache_key
+from fastapi_crudbuilder.generators import generate_cache_key
 
 _LOGGER = logging.getLogger(__name__)
 

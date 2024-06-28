@@ -79,7 +79,7 @@ app.include_router(example)
 
 ### Infer Create/Update
 This will infer the model for the create and update endpoints from the SqlAlchemy model. Otherwise, you can pass in a 
-custom Pydantic model for the data to be validated against. This should also be reflected in the automatically generated OpenAPI documentation.
+custom Pydantic model for the data to be validated against. This will also be reflected in the automatically generated OpenAPI documentation.
 
 ### Security
 You can pass in a FastAPI Security object to the CRUDBuilder class for each operation type (read, create, update, delete).
@@ -91,8 +91,29 @@ return a function that takes the response as an argument and returns a modified 
 These are processed **in order** (e.g. in the example above `YOUR_POSTPROCESSOR_1` would be applied to 
 the database result first, then `YOUR_POSTPROCESSOR_2` etc.) 
 
+Post Processors are expected to receive a passed-in data model and return a callable that takes the response data and modifies it.
+
 This allows you to adjust the response of the CRUD endpoints -- for example if you store dates in your Database as UTC
-but want to render them to users in their local time or a different format.
+but want to render them to users in their local time or a different format. See example below:
+```python
+def transform_response_date(db_model: BaseModel) -> Callable:
+    def transform_dates(data: db_model.__class__, db_model: DeclarativeMeta = db_model):
+        columns = inspect(db_model).columns.items()
+        for name, column in columns:
+            if column.type.python_type.__name__ in (
+                "datetime",
+                "date",
+                "datetime.datetime",
+            ):
+                _LOGGER.info(f"Transforming {name} to ISO 8601 date format.")
+                if getattr(data, name):
+                    setattr(
+                        data, name, convert_iso_datetime_format(getattr(data, name))
+                    )
+        return data
+
+    return transform_dates
+```
 
 
 ### Caching

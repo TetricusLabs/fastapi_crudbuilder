@@ -30,7 +30,7 @@ sqlalchemy = "^2.0.31"
 pymemcache = "^4.0.0"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.4.10"
+ruff = ">=0.4.10,<0.6.0"
 
 [tool.poetry.group.testing.dependencies]
 pytest = "^8.2.1"

@@ -17,9 +17,9 @@ an existing `APIRouter` object in FastAPI, or alternatively can be used to creat
 
 ---
 
-**Documentation**: (This file) <a href="https://github.com/TetricusLabs/crudbuilder" target="_blank">https://github.com/TetricusLabs/crudbuilder</a>
+**Documentation**: (This file) <a href="https://github.com/TetricusLabs/fastapi_crudbuilder" target="_blank">https://github.com/TetricusLabs/crudbuilder</a>
 
-**Source Code**: <a href="https://github.com/TetricusLabs/crudbuilder" target="_blank">https://github.com/TetricusLabs/crudbuilder</a>
+**Source Code**: <a href="https://github.com/TetricusLabs/fastapi_crudbuilder" target="_blank">https://github.com/TetricusLabs/crudbuilder</a>
 
 ---
 

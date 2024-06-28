@@ -1,4 +1,4 @@
-# CRUDBuilder
+# FastAPI CRUDBuilder
 Designed for use with FastAPI to build a router for CRUD operations on a SQLAlchemy
 model. It automates the creation of API endpoints for these operations, making it
 easier to set up a RESTful API.

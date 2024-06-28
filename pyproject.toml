@@ -3,7 +3,7 @@ requires-python = ">=3.11"
 
 
 [tool.poetry]
-name = "CRUDBuilder"
+name = "FastAPI CRUDBuilder"
 version = "0.1.1a7"
 description = "CRUDBuilder helps you to create CRUD endpoints for your FastAPI/ SqlAlchemy database models."
 keywords = ["FastAPI", "CRUD", "SQLAlchemy"]

@@ -12,7 +12,8 @@ Endpoints are created for the following operations:
 - Delete one item by primary key
 
 Endpoints created by CRUDBuilder are designed to support the OpenAPI documentation that FastAPI automatically generates.
-Optionally, you can add security, caching and custom postprocessors to the generated endpoints.
+Optionally, you can add security, caching and custom postprocessors to the generated endpoints. They're designed to attach to
+an existing `APIRouter` object in FastAPI, or alternatively can be used to create a new router.
 
 ---
 
@@ -22,14 +23,29 @@ Optionally, you can add security, caching and custom postprocessors to the gener
 
 ---
 
-## Description
+## Pre-requisites
+- Python 3.10+
+- FastAPI
+- SQLAlchemy
+- [optional] Memcached (pymemcached client)
+
+## Features
+- Automatically generate CRUD endpoints for a given SQLAlchemy model
+- Automatically generate OpenAPI documentation for the generated endpoints
+- Optionally add security to the generated endpoints
+- Optionally add caching to the generated endpoints
+- Optionally add postprocessors to the generated endpoints
+- Optionally infer the create and update models from the SQLAlchemy model, or provide custom Pydantic models
+- Designed to be used with FastAPI
+- Extendable to support other ORMs and caches
+
 
 
 ## Installation
 ```bash
 poetry add fastapi_crudbuilder
 ```
-## Usage
+## Usage Example
 
 ```python
 from fastapi import APIRouter, Security
@@ -38,9 +54,9 @@ from fastapi_crudbuilder import CRUDBuilder
 from src.postprocessors import YOUR_POSTPROCESSOR_1, YOUR_POSTPROCESSOR_2
 from src.database import YOUR_DB_SESSION
 from src.database.models import YOUR_MODEL
-from src.security import YOUR_SECURITY
+from src.security import YOUR_SECURITY_FUNCTION
 
-example = APIRouter(prefix="/example", tags=["Example CRUD"])  # set up a FastAPI router
+example = APIRouter(prefix="/example", tags=["Example CRUD"])  # set up a FastAPI router to attach the CRUD endpoints to
 
 
 @example.get("custom_non_crudbldr_route")
@@ -53,16 +69,16 @@ example = CRUDBuilder(
     db_func=YOUR_DB_SESSION,
     infer_create=True,  # Optionally infer the create model
     infer_update=True,  # Optionally infer the update model
-    read_security=Security(YOUR_SECURITY.verify, scopes=["YOUR_MODEL:all:read"]),
+    read_security=Security(YOUR_SECURITY_FUNCTION.verify, scopes=["YOUR_MODEL:all:read"]),
     # Optionally add custom security function and scope to the endpoint
-    create_security=Security(YOUR_SECURITY.verify, scopes=["YOUR_MODEL:all:create"]),
-    update_security=Security(YOUR_SECURITY.verify, scopes=["YOUR_MODEL:all:update"]),
-    delete_security=Security(YOUR_SECURITY.verify, scopes=["YOUR_MODEL:all:delete"]),
+    create_security=Security(YOUR_SECURITY_FUNCTION.verify, scopes=["YOUR_MODEL:all:create"]),
+    update_security=Security(YOUR_SECURITY_FUNCTION.verify, scopes=["YOUR_MODEL:all:update"]),
+    delete_security=Security(YOUR_SECURITY_FUNCTION.verify, scopes=["YOUR_MODEL:all:delete"]),
     response_postprocessors=[YOUR_POSTPROCESSOR_1(YOUR_MODEL), YOUR_POSTPROCESSOR_2(YOUR_MODEL)],
 ).build(example)  # Attach the CRUD endpoints to the router
 
 ```
-The router must be added to the FastAPI app in order to be used.
+The router **must** then be added to the FastAPI app (like any other router) in order to be used.
 ```python
 from fastapi import FastAPI
 from src.routes.example import example
@@ -95,6 +111,7 @@ Post Processors are expected to receive a passed-in data model and return a call
 
 This allows you to adjust the response of the CRUD endpoints -- for example if you store dates in your Database as UTC
 but want to render them to users in their local time or a different format. See example below:
+
 ```python
 def transform_response_date(db_model: BaseModel) -> Callable:
     def transform_dates(data: db_model.__class__, db_model: DeclarativeMeta = db_model):
@@ -176,3 +193,14 @@ should work, but this has not been tested.
             using FastAPI's Depends.
         * The CRUD endpoints will reflect the attributes and relationships defined in
             the SQLAlchemy model.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## Testing
+We use pytest for testing. To run the tests, simply run `pytest` in the root directory of the project. Tests are stored in the `tests` directory.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)

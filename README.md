@@ -87,9 +87,37 @@ app = FastAPI()
 app.include_router(example)
 
 ```
+
+
+
 ## Required parameters
 - db_model: The SqlAlchemy model you want to create CRUD endpoints for
 - db_func: The function that returns the SqlAlchemy session you'd like to use
+
+
+## Database session handling
+The `db_func` parameter is expected to be a function that returns a SQLAlchemy session. This function will be injected using FastAPI's `Depends` function.
+The generated endpoint will handle adding and committing the session, as well as rolling back the session in the event of an error.
+
+Here is an example of a `db_func` function that returns a SqlAlchemy session:
+```python
+from typing import Generator
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+
+engine= create_engine("sqlite:///./test.db") # Example of a SqlAlchemy engine, replace with your own
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+def get_db() -> Generator[Session, None, None]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()  
+```
+
 
 ## Optional extensions
 
@@ -201,6 +229,10 @@ should work, but this has not been tested.
             using FastAPI's Depends.
         * The CRUD endpoints will reflect the attributes and relationships defined in
             the SQLAlchemy model.
+
+## Future Features
+- Support for other cache clients like redis
+- Async support
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

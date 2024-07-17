@@ -137,7 +137,15 @@ def transform_response_date(db_model: BaseModel) -> Callable:
 You can optionally pass a cache object to the CRUDBuilder class. Right now only Memcached is supported, and only the pymemcached client
 has been tested. See https://pymemcache.readthedocs.io/en/latest/getting_started.html for more information on how to set up a pymemcached client.
 
-In theory any client with the methods:
+#### Caching implementation
+The way caching has been implemented, in the read-one case it relies upon the primary key of the model in question, and takes into account query parameters like equals_field, equals_value, relationships and sorting.
+The primary key distinction is not useful in the case of read-all, but the query parameters are still taken into account.
+
+Practically, this should result in a cache hit for the same item if the primary key is the same, or if the query parameters are the same, across any number of requests. The cache should only be accessible to users with the same endpoint permissions as the user who created the cache.
+
+
+
+In theory any cache client library with the methods:
 - get
 - set
 - delete

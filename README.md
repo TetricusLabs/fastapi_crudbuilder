@@ -99,7 +99,9 @@ app.include_router(example)
 The `db_func` parameter is expected to be a function that returns a SQLAlchemy session. This function will be injected using FastAPI's `Depends` function.
 The generated endpoint will handle adding and committing the session, as well as rolling back the session in the event of an error.
 
-This follows the FastAPI docs on dependency injection. see: https://fastapi.tiangolo.com/tutorial/dependencies/ and https://fastapi.tiangolo.com/reference/dependencies/
+This follows the FastAPI docs on dependency injection. See: https://fastapi.tiangolo.com/tutorial/dependencies/ and https://fastapi.tiangolo.com/reference/dependencies/
+
+See https://fastapi.tiangolo.com/tutorial/sql-databases/ for more information on how to set up a database connection in FastAPI.
 
 Here is an example of a `db_func` function that returns a SqlAlchemy session:
 ```python

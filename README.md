@@ -99,6 +99,8 @@ app.include_router(example)
 The `db_func` parameter is expected to be a function that returns a SQLAlchemy session. This function will be injected using FastAPI's `Depends` function.
 The generated endpoint will handle adding and committing the session, as well as rolling back the session in the event of an error.
 
+This follows the FastAPI docs on dependency injection. see: https://fastapi.tiangolo.com/tutorial/dependencies/ and https://fastapi.tiangolo.com/reference/dependencies/
+
 Here is an example of a `db_func` function that returns a SqlAlchemy session:
 ```python
 from typing import Generator
@@ -106,7 +108,7 @@ from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-engine= create_engine("sqlite:///./test.db") # Example of a SqlAlchemy engine, replace with your own
+engine = create_engine("sqlite:///./test.db")  # Example of a SqlAlchemy engine, replace with your own
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -166,10 +168,12 @@ You can optionally pass a cache object to the CRUDBuilder class. Right now only 
 has been tested. See https://pymemcache.readthedocs.io/en/latest/getting_started.html for more information on how to set up a pymemcached client.
 
 #### Caching implementation
-The way caching has been implemented, in the read-one case it relies upon the primary key of the model in question, and takes into account query parameters like equals_field, equals_value, relationships and sorting.
+Caching relies upon the primary key of the model in question in the case of singe items, and takes into account query parameters like equals_field, equals_value, relationships and sorting.
 The primary key distinction is not useful in the case of read-all, but the query parameters are still taken into account.
 
-Practically, this should result in a cache hit for the same item if the primary key is the same, or if the query parameters are the same, across any number of requests. The cache should only be accessible to users with the same endpoint permissions as the user who created the cache.
+Practically, this should result in a cache hit for the same item if the primary key is the same, or if the query parameters are the same, across any number of requests. 
+
+We chose to cache inside the endpoint, instead of caching the entire response. 
 
 
 

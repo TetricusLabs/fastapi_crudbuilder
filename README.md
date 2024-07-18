@@ -173,7 +173,9 @@ The primary key distinction is not useful in the case of read-all, but the query
 
 Practically, this should result in a cache hit for the same item if the primary key is the same, or if the query parameters are the same, across any number of requests. 
 
-We chose to cache inside the endpoint, instead of caching the entire response. 
+We chose to cache inside the endpoint, instead of caching the endpoint itself. 
+
+This allows for caching to be subject to the same access controls applied to the endpoint, and share that logic. It also means that if multiple CRUDBuilders are invoked on the same model, but with different postprocessors, they would share caching on the underlying data.
 
 
 

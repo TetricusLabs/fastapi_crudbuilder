@@ -87,9 +87,41 @@ app = FastAPI()
 app.include_router(example)
 
 ```
+
+
+
 ## Required parameters
 - db_model: The SqlAlchemy model you want to create CRUD endpoints for
 - db_func: The function that returns the SqlAlchemy session you'd like to use
+
+
+## Database session handling
+The `db_func` parameter is expected to be a function that returns a SQLAlchemy session. This function will be injected using FastAPI's `Depends` function.
+The generated endpoint will handle adding and committing the session, as well as rolling back the session in the event of an error.
+
+This follows the FastAPI docs on dependency injection. See: https://fastapi.tiangolo.com/tutorial/dependencies/ and https://fastapi.tiangolo.com/reference/dependencies/
+
+See https://fastapi.tiangolo.com/tutorial/sql-databases/ for more information on how to set up a database connection in FastAPI.
+
+Here is an example of a `db_func` function that returns a SqlAlchemy session:
+```python
+from typing import Generator
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+
+engine = create_engine("sqlite:///./test.db")  # Example of a SqlAlchemy engine, replace with your own
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+def get_db() -> Generator[Session, None, None]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()  
+```
+
 
 ## Optional extensions
 
@@ -137,7 +169,19 @@ def transform_response_date(db_model: BaseModel) -> Callable:
 You can optionally pass a cache object to the CRUDBuilder class. Right now only Memcached is supported, and only the pymemcached client
 has been tested. See https://pymemcache.readthedocs.io/en/latest/getting_started.html for more information on how to set up a pymemcached client.
 
-In theory any client with the methods:
+#### Caching implementation
+Caching relies upon the primary key of the model in question in the case of singe items, and takes into account query parameters like equals_field, equals_value, relationships and sorting.
+The primary key distinction is not useful in the case of read-all, but the query parameters are still taken into account.
+
+Practically, this should result in a cache hit for the same item if the primary key is the same, or if the query parameters are the same, across any number of requests. 
+
+We chose to cache inside the endpoint, instead of caching the endpoint itself. 
+
+This allows for caching to be subject to the same access controls applied to the endpoint, and share that logic. It also means that if multiple CRUDBuilders are invoked on the same model, but with different postprocessors, they would share caching on the underlying data (because the generated cache key would be the same).
+
+
+
+In theory any cache client library with the methods:
 - get
 - set
 - delete
@@ -193,6 +237,10 @@ should work, but this has not been tested.
             using FastAPI's Depends.
         * The CRUD endpoints will reflect the attributes and relationships defined in
             the SQLAlchemy model.
+
+## Future Features
+- Support for other cache clients like redis
+- Async support
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

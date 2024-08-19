@@ -23,7 +23,7 @@ line-length = 88
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.111.0"
+fastapi = ">=0.111,<0.113"
 sqlalchemy = "^2.0.31"
 
 [tool.poetry.group.optional.dependencies]
